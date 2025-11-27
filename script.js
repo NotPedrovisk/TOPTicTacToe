@@ -1,9 +1,9 @@
-console.log("JOE MAMA")
-function GameBoard(){
+const gameBoard = (function(){
     const columns = 3;
     const rows = 3;
     const board = [];
 
+    //draws board in board array
     for(let i=0; i<columns; i++){
         board[i] = []
         for(let k=0; k<rows; k++){
@@ -11,10 +11,12 @@ function GameBoard(){
         }
     }
 
-    const GetBoard = () => board;
-
-    return GetBoard()
-}
+    return {
+        getBoard(){
+            return board
+        }
+    }
+})();
 
 
 function Cell(){
@@ -22,4 +24,4 @@ function Cell(){
     
 }
 
-console.log(GameBoard())
+console.log(gameBoard.getBoard())
