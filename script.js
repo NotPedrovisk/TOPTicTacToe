@@ -7,7 +7,7 @@ const gameBoard = (function(){
     for(let i=0; i<columns; i++){
         board[i] = []
         for(let k=0; k<rows; k++){
-            board[i].push(Cell)
+            board[i].push(Cell())
         }
     }
 
@@ -28,7 +28,12 @@ function makePlayer(name, value){
 }
 
 function Cell(){
-    let value = 0;
+    let value = 1;
+    return{
+        cellChange(player){
+            value = player.value
+        }
+    }
     
 }
 
@@ -37,6 +42,7 @@ const GameController = (function(){
     const player2 = makePlayer("player 2", 2);
 
     let turn = 1
+    let curPlayer = player1
   
     return{
         turnChecker(){
@@ -45,11 +51,14 @@ const GameController = (function(){
         nextTurn(){
             if(turn ===1){
                 turn = 2;
+                curPlayer = player2;
             }
             else{
-                turn = 1
+                turn = 1;
+                curPlayer = player1;
             };
-        }
+        },
+
     }
     
 
@@ -62,3 +71,4 @@ GameController.nextTurn();
 console.log(GameController.turnChecker());
 GameController.nextTurn();
 console.log(GameController.turnChecker());
+
