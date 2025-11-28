@@ -4,9 +4,9 @@ const gameBoard = (function(){
     const board = [];
 
     //draws board in board array
-    for(let i=0; i<columns; i++){
+    for(let i=0; i<rows; i++){
         board[i] = []
-        for(let k=0; k<rows; k++){
+        for(let k=0; k<columns; k++){
             board[i].push(Cell())
         }
     }
@@ -39,7 +39,6 @@ function Cell(){
         },
 
     }
-    
 }
 
 function markCell(x,y){
@@ -85,15 +84,26 @@ const GameController = (function(){
 })();
    
 
-function printBoard() {
+const drawBoard = (function(){
+    const gameWindow = document.getElementById("gameWindow");
     const board = gameBoard.getBoard();
-    for (let i = 0; i < board.length; i++) {
-        let row = board[i].map(cell => cell.getValue());
-        console.log(row);
-    }
-}
+        
+        return{
+            draw(){
+                for (let i = 0; i < board.length; i++) {
+                let row = board[i].map(cell => cell.getValue());
+                let rowGame = document.createElement("div");
+                rowGame.classList.add("rows");
+                rowGame.textContent = row;
+                gameWindow.appendChild(rowGame);
+            }
+        }
+        }
+})();
+    
+
 
 markCell(1,1);
 markCell(1,2)
-printBoard();
-markCell(1,1)
+markCell(0,2)
+drawBoard.draw();
