@@ -23,18 +23,35 @@ function makePlayer(name, value){
     return{
         getPlayerInfo(){
             return{name, value}
-        }
+        },value
     }
 }
 
+
 function Cell(){
-    let value = 1;
+    let value = 0;
     return{
         cellChange(player){
             value = player.value
-        }
+        },
+        getValue(){
+            return value
+        },
+
     }
     
+}
+
+function markCell(x,y){
+    const player = GameController.getCurrentPlayer();
+    const board = gameBoard.getBoard();
+
+    if(board[x][y].getValue() === 0){
+        board[x][y].cellChange(player);
+        GameController.nextTurn();
+    } else {
+        console.log("cell taken already")
+    }
 }
 
 const GameController = (function(){
@@ -58,6 +75,9 @@ const GameController = (function(){
                 curPlayer = player1;
             };
         },
+        getCurrentPlayer(){
+            return curPlayer;
+        }
 
     }
     
@@ -65,10 +85,15 @@ const GameController = (function(){
 })();
    
 
-console.log(gameBoard.getBoard());
-console.log(GameController.turnChecker());
-GameController.nextTurn();
-console.log(GameController.turnChecker());
-GameController.nextTurn();
-console.log(GameController.turnChecker());
+function printBoard() {
+    const board = gameBoard.getBoard();
+    for (let i = 0; i < board.length; i++) {
+        let row = board[i].map(cell => cell.getValue());
+        console.log(row);
+    }
+}
 
+markCell(1,1);
+markCell(1,2)
+printBoard();
+markCell(1,1)
