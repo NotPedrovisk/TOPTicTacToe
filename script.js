@@ -15,6 +15,7 @@ const gameBoard = (function(){
         getBoard(){
             return board
         }
+
     }
 })();
 
@@ -83,27 +84,32 @@ const GameController = (function(){
         },
         checkForWin(){
             const board = gameBoard.getBoard();
-            //checks for row 1 2 3
-            if((board[0][0].getValue() == board[0][1].getValue() && board[0][0].getValue() == board[0][2].getValue())
-            &&(board[0][0].getValue() != 0 && board[0][1].getValue() != 0 && board[0][2].getValue() != 0)){
-                console.log("POOO1")
-            }
-            else if((board[1][0].getValue() == board[1][1].getValue() && board[1][0].getValue() == board[1][2].getValue())
-                &&(board[1][0].getValue() != 0 && board[1][1].getValue() != 0 && board[1][2].getValue() != 0)){
-                    console.log("POOO2")
-                }
-            else if((board[2][0].getValue() == board[2][1].getValue() && board[2][0].getValue() == board[2][2].getValue())
-                &&(board[2][0].getValue() != 0 && board[2][1].getValue() != 0 && board[2][2].getValue() != 0)){
-                console.log("POOO3")
+            
+            //check for row win, or column win after that, while checking if cell is not empty
+            for(let row = 0; row < 3; row++){
+                if((board[row][0].getValue() == board[row][1].getValue() &&
+                 board[row][0].getValue() == board[row][2].getValue()) &&
+                (board[row][0].getValue() != 0 && board[row][1].getValue() != 0 && board[row][2].getValue() != 0)){
+                    console.log(`win row ${row}`)
+                 }
                 }
 
+            for(let column = 0; column < 3; column++){
+                if((board[0][column].getValue() == board[1][column].getValue() &&
+                 board[0][column].getValue() == board[2][column].getValue()) &&
+                (board[0][column].getValue() != 0 && board[1][column].getValue() != 0 && board[2][column].getValue() != 0)){
+                    console.log(`win column ${column}`)}}
+            
+            }
+
+            
             
         }
 
     }
     
 
-})();
+)();
    
 
 const drawBoard = (function(){
@@ -159,9 +165,9 @@ const resetBoard = (function(){
 
 markCell(2,0);
 markCell(0,1);
-markCell(2,1);
+markCell(1,0);
 markCell(0,2);
-markCell(2,2);
+markCell(0,0);
 drawBoard.draw();
 
 
