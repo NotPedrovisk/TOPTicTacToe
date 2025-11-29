@@ -51,6 +51,7 @@ function markCell(x,y){
     if(board[x][y].getValue() === 0){
         board[x][y].cellChange(player);
         GameController.nextTurn();
+        GameController.checkForWin();
     } else {
         console.log("cell taken already")
     }
@@ -79,6 +80,24 @@ const GameController = (function(){
         },
         getCurrentPlayer(){
             return curPlayer;
+        },
+        checkForWin(){
+            const board = gameBoard.getBoard();
+            //checks for row 1 2 3
+            if((board[0][0].getValue() == board[0][1].getValue() && board[0][0].getValue() == board[0][2].getValue())
+            &&(board[0][0].getValue() != 0 && board[0][1].getValue() != 0 && board[0][2].getValue() != 0)){
+                console.log("POOO1")
+            }
+            else if((board[1][0].getValue() == board[1][1].getValue() && board[1][0].getValue() == board[1][2].getValue())
+                &&(board[1][0].getValue() != 0 && board[1][1].getValue() != 0 && board[1][2].getValue() != 0)){
+                    console.log("POOO2")
+                }
+            else if((board[2][0].getValue() == board[2][1].getValue() && board[2][0].getValue() == board[2][2].getValue())
+                &&(board[2][0].getValue() != 0 && board[2][1].getValue() != 0 && board[2][2].getValue() != 0)){
+                console.log("POOO3")
+                }
+
+            
         }
 
     }
@@ -132,20 +151,18 @@ const resetBoard = (function(){
                
                 //redraws board after everything is reset
                 drawBoard.draw();
-                
-
             }
     }
 })();
     
 
 
-markCell(1,1);
-markCell(1,2)
-markCell(0,2)
+markCell(2,0);
+markCell(0,1);
+markCell(2,1);
+markCell(0,2);
+markCell(2,2);
 drawBoard.draw();
-drawBoard.log();
-resetBoard.reset();
-drawBoard.log();
+
 
 
