@@ -39,7 +39,6 @@ function Cell(){
         },
         cellReset(){
             value = 0;
-            return value
         }
 
     }
@@ -101,21 +100,42 @@ const drawBoard = (function(){
                 rowGame.textContent = row;
                 gameWindow.appendChild(rowGame);
             }
-            }, erase(){
-                //locates rows, then for every row reset their cells
-                let rows = document.getElementsByClassName("rows");
-                for(CurRow of rows){
-                    for (let i = 0; i < board.length; i++){
-                        let row = board[i].map(cell => cell.cellReset());
-                        CurRow.textContent = row
-                    }
+            }, 
+            //logs on console
+            log(){
+                for (row of gameBoard.getBoard()){
+                    console.log(row.map(cell=>cell.getValue()))
                 }
-
             }
 
             
             
         }
+})();
+
+const resetBoard = (function(){
+    const gameWindow = document.getElementById("gameWindow");
+    const board = gameBoard.getBoard();
+    
+    return{
+        reset(){
+                //deletes all children from dom for fresh start
+                let rows = Array.from(document.getElementsByClassName("rows"));
+                for(domRow of rows){
+                    gameWindow.removeChild(domRow);
+                }
+                
+                //resets every cell in the board array
+                for (let i = 0; i < board.length; i++){
+                board[i].map(cell => cell.cellReset());
+                }
+               
+                //redraws board after everything is reset
+                drawBoard.draw();
+                
+
+            }
+    }
 })();
     
 
@@ -124,5 +144,8 @@ markCell(1,1);
 markCell(1,2)
 markCell(0,2)
 drawBoard.draw();
-drawBoard.erase();
+drawBoard.log();
+resetBoard.reset();
+drawBoard.log();
+
 
