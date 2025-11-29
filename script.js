@@ -37,6 +37,10 @@ function Cell(){
         getValue(){
             return value
         },
+        cellReset(){
+            value = 0;
+            return value
+        }
 
     }
 }
@@ -97,7 +101,20 @@ const drawBoard = (function(){
                 rowGame.textContent = row;
                 gameWindow.appendChild(rowGame);
             }
-        }
+            }, erase(){
+                //locates rows, then for every row reset their cells
+                let rows = document.getElementsByClassName("rows");
+                for(CurRow of rows){
+                    for (let i = 0; i < board.length; i++){
+                        let row = board[i].map(cell => cell.cellReset());
+                        CurRow.textContent = row
+                    }
+                }
+
+            }
+
+            
+            
         }
 })();
     
@@ -107,3 +124,5 @@ markCell(1,1);
 markCell(1,2)
 markCell(0,2)
 drawBoard.draw();
+drawBoard.erase();
+
