@@ -99,10 +99,23 @@ const GameController = (function(){
                  board[0][column].getValue() == board[2][column].getValue()) &&
                 (board[0][column].getValue() != 0 && board[1][column].getValue() != 0 && board[2][column].getValue() != 0)){
                     console.log(`win column ${column}`)}}
+
+
+            //checks for diagonal win or anti diagonal win
+            if((board[0][0].getValue() == board[1][1].getValue() &&
+                board[0][0].getValue() == board[2][2].getValue()) &&
+                (board[0][0].getValue() != 0 && board[1][1].getValue() != 0 && board[2][2].getValue() != 0)){
+                    console.log("diagonal win")
+            }
+
+            if((board[0][2].getValue() == board[1][1].getValue() &&
+                board[0][2].getValue() == board[2][0].getValue()) &&
+                (board[0][2].getValue() != 0 && board[1][1].getValue() != 0 && board[2][0].getValue() != 0)){
+                    console.log("Antidiagonal win")
+                }
             
             }
 
-            
             
         }
 
@@ -163,11 +176,11 @@ const resetBoard = (function(){
     
 
 
-markCell(2,0);
-markCell(0,1);
-markCell(1,0);
 markCell(0,2);
+markCell(0,1);
+markCell(1,1);
 markCell(0,0);
+markCell(2,0);
 drawBoard.draw();
 
 
