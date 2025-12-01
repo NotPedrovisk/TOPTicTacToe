@@ -143,12 +143,21 @@ const drawBoard = (function(){
         
         return{
             draw(){
+                //creates rows in DOM
                 for (let i = 0; i < board.length; i++) {
-                let row = board[i].map(cell => cell.getValue());
-                let rowGame = document.createElement("div");
-                rowGame.classList.add("rows");
-                rowGame.textContent = row;
-                gameWindow.appendChild(rowGame);
+                    let rowGame = document.createElement("div");
+                    rowGame.classList.add("rows")
+                    gameWindow.appendChild(rowGame);
+                    //creates cells in row
+                    for(let k = 0; k < board[i].length; k++){
+                        let cell = board[i][k].getValue();
+                        let cellGame = document.createElement("div");
+                        cellGame.classList.add("cell");
+                        cellGame.textContent = cell;
+                        rowGame.appendChild(cellGame)
+                        
+                    }
+                
             }
             }, 
             //logs on console
@@ -194,6 +203,5 @@ markCell(1,1);
 markCell(0,0);
 markCell(2,0);
 drawBoard.draw();
-
 
 
