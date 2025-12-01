@@ -51,8 +51,10 @@ function markCell(x,y){
         board[x][y].cellChange(player);
         GameController.nextTurn();
         GameController.checkForWin();
+        return player
     } else {
         console.log("cell taken already")
+        return 0
     }
 }
 
@@ -63,7 +65,7 @@ const GameController = (function(){
 
 
     let turn = 1
-    let curPlayer = player1
+    let curPlayer = 1
   
     return{
         turnChecker(){
@@ -72,11 +74,11 @@ const GameController = (function(){
         nextTurn(){
             if(turn ===1){
                 turn = 2;
-                curPlayer = player2;
+                curPlayer = 2;
             }
             else{
                 turn = 1;
-                curPlayer = player1;
+                curPlayer = 1;
             };
         },
         getCurrentPlayer(){
@@ -153,6 +155,12 @@ const drawBoard = (function(){
                         let cell = board[i][k].getValue();
                         let cellGame = document.createElement("div");
                         cellGame.classList.add("cell");
+
+                        //lets user click button only once, then stops it from clicking again until reset
+                        cellGame.addEventListener("click", ()=>{
+                            
+                            cellGame.textContent = markCell(i,k);
+                        }, {once: true})
                         cellGame.textContent = cell;
                         rowGame.appendChild(cellGame)
                         
@@ -195,13 +203,12 @@ const resetBoard = (function(){
     }
 })();
     
+const game = document.getElementById("game");
+const resetBtn = document.createElement("button");
+resetBtn.addEventListener("click", ()=>resetBoard.reset());
+resetBtn.textContent = "Reset"
+document.body.appendChild(resetBtn)
 
-
-markCell(0,2);
-markCell(0,1);
-markCell(1,1);
-markCell(0,0);
-markCell(2,0);
 drawBoard.draw();
 
 
