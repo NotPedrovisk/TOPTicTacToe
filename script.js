@@ -22,9 +22,7 @@ const gameBoard = (function(){
 
 function makePlayer(name, value){
     return{
-        getPlayerInfo(){
-            return{name, value}
-        },value
+        name,value
     }
 }
 
@@ -61,6 +59,8 @@ function markCell(x,y){
 const GameController = (function(){
     const player1 = makePlayer("player 1", 1);
     const player2 = makePlayer("player 2", 2);
+   
+
 
     let turn = 1
     let curPlayer = player1
@@ -82,36 +82,48 @@ const GameController = (function(){
         getCurrentPlayer(){
             return curPlayer;
         },
+        
         checkForWin(){
             const board = gameBoard.getBoard();
+
+            function checkWinner(cellValue){
+                if(cellValue == 1){
+                    return (player1.name)
+                    
+                }
+                if(cellValue == 2){
+                    return player2.name
+                }
+            }
             
             //check for row win, or column win after that, while checking if cell is not empty
             for(let row = 0; row < 3; row++){
                 if((board[row][0].getValue() == board[row][1].getValue() &&
                  board[row][0].getValue() == board[row][2].getValue()) &&
-                (board[row][0].getValue() != 0 && board[row][1].getValue() != 0 && board[row][2].getValue() != 0)){
-                    console.log(`win row ${row}`)
+                (board[row][0].getValue() != 0)){
+                    console.log(checkWinner(board[row][0].getValue()))
                  }
                 }
 
             for(let column = 0; column < 3; column++){
                 if((board[0][column].getValue() == board[1][column].getValue() &&
                  board[0][column].getValue() == board[2][column].getValue()) &&
-                (board[0][column].getValue() != 0 && board[1][column].getValue() != 0 && board[2][column].getValue() != 0)){
-                    console.log(`win column ${column}`)}}
+                (board[0][column].getValue() != 0)){
+                    console.log(checkWinner(board[0][column].getValue()))}
+                }
 
 
             //checks for diagonal win or anti diagonal win
             if((board[0][0].getValue() == board[1][1].getValue() &&
                 board[0][0].getValue() == board[2][2].getValue()) &&
-                (board[0][0].getValue() != 0 && board[1][1].getValue() != 0 && board[2][2].getValue() != 0)){
-                    console.log("diagonal win")
+                (board[0][0].getValue() != 0)){
+                    console.log(checkWinner(board[0][0].getValue()))
             }
 
             if((board[0][2].getValue() == board[1][1].getValue() &&
                 board[0][2].getValue() == board[2][0].getValue()) &&
-                (board[0][2].getValue() != 0 && board[1][1].getValue() != 0 && board[2][0].getValue() != 0)){
-                    console.log("Antidiagonal win")
+                (board[0][2].getValue() != 0)){
+                    console.log(checkWinner(board[0][2].getValue()))
                 }
             
             }
