@@ -31,7 +31,7 @@ function Cell(){
     let value = 0;
     return{
         cellChange(player){
-            value = player.value
+            value = player
         },
         getValue(){
             return value
@@ -47,38 +47,52 @@ function markCell(x,y){
     const player = GameController.getCurrentPlayer();
     const board = gameBoard.getBoard();
 
-    if(board[x][y].getValue() === 0){
-        board[x][y].cellChange(player);
-        GameController.nextTurn();
-        GameController.checkForWin();
-        return player
-    } else {
-        console.log("cell taken already")
-        return 0
+    if(GameController.getGameOver() == false){
+        if(board[x][y].getValue() === 0){
+            board[x][y].cellChange(player);
+            GameController.nextTurn();
+            GameController.checkForWin();
+            return player
+        } else {
+            console.log("cell taken already")
+            return 0
     }
+    }
+    
 }
 
 const GameController = (function(){
-    const player1 = makePlayer("player 1", 1);
-    const player2 = makePlayer("player 2", 2);
+    const player1 = makePlayer("player x", "x");
+    const player2 = makePlayer("player o", "o");
+    const winDisplay = document.getElementById("winDisplay");
    
+    let gameOver = false;
 
 
-    let turn = 1
-    let curPlayer = 1
+    let turn = "x"
+    let curPlayer = "x"
   
     return{
+        getGameOver(){
+            return gameOver
+        },
+        setGameOver(){
+            gameOver = true
+        },
+        cancelGameOver(){
+            gameOver = false
+        },
         turnChecker(){
             return turn
         },
         nextTurn(){
-            if(turn ===1){
-                turn = 2;
-                curPlayer = 2;
+            if(turn ==="x"){
+                turn = "o";
+                curPlayer = "o";
             }
             else{
-                turn = 1;
-                curPlayer = 1;
+                turn = "x";
+                curPlayer = "x";
             };
         },
         getCurrentPlayer(){
@@ -89,21 +103,22 @@ const GameController = (function(){
             const board = gameBoard.getBoard();
 
             function checkWinner(cellValue){
-                if(cellValue == 1){
+                if(cellValue == "x"){
                     return (player1.name)
                     
                 }
-                if(cellValue == 2){
+                if(cellValue == "o"){
                     return player2.name
                 }
             }
             
             //check for row win, or column win after that, while checking if cell is not empty
             for(let row = 0; row < 3; row++){
-                if((board[row][0].getValue() == board[row][1].getValue() &&
-                 board[row][0].getValue() == board[row][2].getValue()) &&
+                if((board[row][0].getValue() === board[row][1].getValue() &&
+                 board[row][0].getValue() === board[row][2].getValue()) &&
                 (board[row][0].getValue() != 0)){
-                    console.log(checkWinner(board[row][0].getValue()))
+                    winDisplay.textContent = (checkWinner(board[row][0].getValue())) + " wins!"
+                    GameController.setGameOver()
                  }
                 }
 
@@ -111,7 +126,9 @@ const GameController = (function(){
                 if((board[0][column].getValue() == board[1][column].getValue() &&
                  board[0][column].getValue() == board[2][column].getValue()) &&
                 (board[0][column].getValue() != 0)){
-                    console.log(checkWinner(board[0][column].getValue()))}
+                    winDisplay.textContent = (checkWinner(board[0][column].getValue()))  + " wins!"
+                    GameController.setGameOver()
+                }
                 }
 
 
@@ -119,14 +136,16 @@ const GameController = (function(){
             if((board[0][0].getValue() == board[1][1].getValue() &&
                 board[0][0].getValue() == board[2][2].getValue()) &&
                 (board[0][0].getValue() != 0)){
-                    console.log(checkWinner(board[0][0].getValue()))
+                    winDisplay.textContent = (checkWinner(board[0][0].getValue()))  + " wins!"
+                    GameController.setGameOver()
             }
 
             if((board[0][2].getValue() == board[1][1].getValue() &&
                 board[0][2].getValue() == board[2][0].getValue()) &&
                 (board[0][2].getValue() != 0)){
-                    console.log(checkWinner(board[0][2].getValue()))
-                }
+                    winDisplay.textContent = (checkWinner(board[0][2].getValue()))  + " wins!"
+                    GameController.setGameOver()
+                } 
             
             }
 
@@ -158,8 +177,10 @@ const drawBoard = (function(){
 
                         //lets user click button only once, then stops it from clicking again until reset
                         cellGame.addEventListener("click", ()=>{
+                            if(!GameController.getGameOver()){
+                                cellGame.textContent = markCell(i,k);
+                            }
                             
-                            cellGame.textContent = markCell(i,k);
                         }, {once: true})
                         cellGame.textContent = cell;
                         rowGame.appendChild(cellGame)
@@ -182,6 +203,7 @@ const drawBoard = (function(){
 
 const resetBoard = (function(){
     const gameWindow = document.getElementById("gameWindow");
+    const winDisplay = document.getElementById("winDisplay");
     const board = gameBoard.getBoard();
     
     return{
@@ -196,18 +218,19 @@ const resetBoard = (function(){
                 for (let i = 0; i < board.length; i++){
                 board[i].map(cell => cell.cellReset());
                 }
+                winDisplay.textContent = ""
                
                 //redraws board after everything is reset
                 drawBoard.draw();
+                GameController.cancelGameOver();
             }
     }
 })();
     
-const game = document.getElementById("game");
-const resetBtn = document.createElement("button");
+
+const resetBtn = document.getElementById("resetBtn");
 resetBtn.addEventListener("click", ()=>resetBoard.reset());
-resetBtn.textContent = "Reset"
-document.body.appendChild(resetBtn)
+
 
 drawBoard.draw();
 
