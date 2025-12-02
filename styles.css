@@ -41,6 +41,10 @@ body{
     font-size: 2em;
 }
 
+#curPlayer{
+    font-size: 2em;
+}
+
 #winDisplay{
     animation-name: winnerAnim;
     animation-duration: 2s;

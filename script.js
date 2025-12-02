@@ -45,11 +45,15 @@ function Cell(){
 
 function markCell(x,y){
     const player = GameController.getCurrentPlayer();
+    const nxtPlayer = GameController.getNextPlayer();
     const board = gameBoard.getBoard();
+
+   
 
     if(GameController.getGameOver() == false){
         if(board[x][y].getValue() === 0){
             board[x][y].cellChange(player);
+            playerDisp.textContent = `${nxtPlayer}'s Turn`
             GameController.nextTurn();
             GameController.checkForWin();
             return player
@@ -68,7 +72,8 @@ const GameController = (function(){
     let gameOver = false;
 
 
-    let curPlayer = "x"
+    let curPlayer = "x";
+    let nextPlayer = "o"
   
     return{
         getGameOver(){
@@ -86,13 +91,18 @@ const GameController = (function(){
         nextTurn(){
             if(curPlayer ==="x"){
                 curPlayer = "o";
+                nextPlayer = "x"
             }
             else{
                 curPlayer = "x";
+                nextPlayer = "o";
             };
         },
         getCurrentPlayer(){
             return curPlayer;
+        },
+        getNextPlayer(){
+            return nextPlayer
         },
         
         checkForWin(){
@@ -113,6 +123,7 @@ const GameController = (function(){
                 if((board[row][0].getValue() === board[row][1].getValue() &&
                  board[row][0].getValue() === board[row][2].getValue()) &&
                 (board[row][0].getValue() != 0)){
+                    playerDisp.textContent = ""
                     winDisplay.textContent = (checkWinner(board[row][0].getValue())) + " wins!";
                     GameController.setGameOver();
                  }
@@ -122,6 +133,7 @@ const GameController = (function(){
                 if((board[0][column].getValue() == board[1][column].getValue() &&
                  board[0][column].getValue() == board[2][column].getValue()) &&
                 (board[0][column].getValue() != 0)){
+                    playerDisp.textContent = ""
                     winDisplay.textContent = (checkWinner(board[0][column].getValue()))  + " wins!";
                     GameController.setGameOver();
                 }
@@ -132,6 +144,7 @@ const GameController = (function(){
             if((board[0][0].getValue() == board[1][1].getValue() &&
                 board[0][0].getValue() == board[2][2].getValue()) &&
                 (board[0][0].getValue() != 0)){
+                    playerDisp.textContent = ""
                     winDisplay.textContent = (checkWinner(board[0][0].getValue()))  + " wins!";
                     GameController.setGameOver();
             }
@@ -139,6 +152,7 @@ const GameController = (function(){
             if((board[0][2].getValue() == board[1][1].getValue() &&
                 board[0][2].getValue() == board[2][0].getValue()) &&
                 (board[0][2].getValue() != 0)){
+                    playerDisp.textContent = ""
                     winDisplay.textContent = (checkWinner(board[0][2].getValue()))  + " wins!";
                     GameController.setGameOver();
                 } 
@@ -153,6 +167,7 @@ const GameController = (function(){
                 }
             }
             if (tieCheck.length == 9){
+                playerDisp.textContent = ""
                 winDisplay.textContent = "It's a tie!";
                 GameController.setGameOver()
             }
@@ -243,6 +258,8 @@ const resetBoard = (function(){
 })();
     
 
+const playerDisp = document.getElementById("curPlayer");
+playerDisp.textContent = `${GameController.getCurrentPlayer()}'s Turn`
 const resetBtn = document.getElementById("resetBtn");
 resetBtn.addEventListener("click", ()=>resetBoard.reset());
 
