@@ -54,8 +54,7 @@ function markCell(x,y){
             GameController.checkForWin();
             return player
         } else {
-            console.log("cell taken already")
-            return 0
+            console.log("cell taken already");
     }
     }
     
@@ -69,7 +68,6 @@ const GameController = (function(){
     let gameOver = false;
 
 
-    let turn = "x"
     let curPlayer = "x"
   
     return{
@@ -83,15 +81,13 @@ const GameController = (function(){
             gameOver = false
         },
         turnChecker(){
-            return turn
+            return curPlayer
         },
         nextTurn(){
-            if(turn ==="x"){
-                turn = "o";
+            if(curPlayer ==="x"){
                 curPlayer = "o";
             }
             else{
-                turn = "x";
                 curPlayer = "x";
             };
         },
@@ -117,8 +113,8 @@ const GameController = (function(){
                 if((board[row][0].getValue() === board[row][1].getValue() &&
                  board[row][0].getValue() === board[row][2].getValue()) &&
                 (board[row][0].getValue() != 0)){
-                    winDisplay.textContent = (checkWinner(board[row][0].getValue())) + " wins!"
-                    GameController.setGameOver()
+                    winDisplay.textContent = (checkWinner(board[row][0].getValue())) + " wins!";
+                    GameController.setGameOver();
                  }
                 }
 
@@ -126,8 +122,8 @@ const GameController = (function(){
                 if((board[0][column].getValue() == board[1][column].getValue() &&
                  board[0][column].getValue() == board[2][column].getValue()) &&
                 (board[0][column].getValue() != 0)){
-                    winDisplay.textContent = (checkWinner(board[0][column].getValue()))  + " wins!"
-                    GameController.setGameOver()
+                    winDisplay.textContent = (checkWinner(board[0][column].getValue()))  + " wins!";
+                    GameController.setGameOver();
                 }
                 }
 
@@ -136,18 +132,36 @@ const GameController = (function(){
             if((board[0][0].getValue() == board[1][1].getValue() &&
                 board[0][0].getValue() == board[2][2].getValue()) &&
                 (board[0][0].getValue() != 0)){
-                    winDisplay.textContent = (checkWinner(board[0][0].getValue()))  + " wins!"
-                    GameController.setGameOver()
+                    winDisplay.textContent = (checkWinner(board[0][0].getValue()))  + " wins!";
+                    GameController.setGameOver();
             }
 
             if((board[0][2].getValue() == board[1][1].getValue() &&
                 board[0][2].getValue() == board[2][0].getValue()) &&
                 (board[0][2].getValue() != 0)){
-                    winDisplay.textContent = (checkWinner(board[0][2].getValue()))  + " wins!"
-                    GameController.setGameOver()
+                    winDisplay.textContent = (checkWinner(board[0][2].getValue()))  + " wins!";
+                    GameController.setGameOver();
                 } 
+
+            
+            const tieCheck = [];
+            for(let rows=0; rows<board.length; rows++){
+                for(let cell = 0; cell<board[rows].length; cell++){
+                    if (board[rows][cell].getValue() != 0){
+                        tieCheck.push(cell);
+                    }
+                }
+            }
+            if (tieCheck.length == 9){
+                winDisplay.textContent = "It's a tie!";
+                GameController.setGameOver()
+            }
+                
+            
             
             }
+
+            
 
             
         }
@@ -215,9 +229,10 @@ const resetBoard = (function(){
                 }
                 
                 //resets every cell in the board array
-                for (let i = 0; i < board.length; i++){
-                board[i].map(cell => cell.cellReset());
-                }
+                for (let row of board){
+                    for(let cell of row){
+                        cell.cellReset();
+                        }}
                 winDisplay.textContent = ""
                
                 //redraws board after everything is reset
